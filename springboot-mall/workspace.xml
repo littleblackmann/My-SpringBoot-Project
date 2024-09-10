@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e3d8f75a-cb18-4617-861b-12aff2f42a8f" name="Changes" comment="初始化 springboot">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/controller/ProductController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/dao/ProductDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/dao/impl/ProductDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/model/Product.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/rowmapper/ProductRowMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/service/ProductService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/service/impl/ProductServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    <list default="true" id="e3d8f75a-cb18-4617-861b-12aff2f42a8f" name="Changes" comment="商品功能-查詢商品">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/constant/ProductCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/rowmapper/ProductRowMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/littleblack/springbootmall/rowmapper/ProductRowMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +18,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -102,7 +98,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1725959280027</updated>
-      <workItem from="1725959281125" duration="5213000" />
+      <workItem from="1725959281125" duration="6893000" />
     </task>
     <task id="LOCAL-00001" summary="初始化 springboot">
       <option name="closed" value="true" />
@@ -120,7 +116,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725959878528</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="商品功能-查詢商品">
+      <option name="closed" value="true" />
+      <created>1725966878809</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725966878809</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,6 +132,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="初始化 springboot" />
-    <option name="LAST_COMMIT_MESSAGE" value="初始化 springboot" />
+    <MESSAGE value="商品功能-查詢商品" />
+    <option name="LAST_COMMIT_MESSAGE" value="商品功能-查詢商品" />
   </component>
 </project>
