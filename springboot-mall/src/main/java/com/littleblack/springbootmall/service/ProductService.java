@@ -9,4 +9,5 @@ public interface ProductService {
 
     Integer createProduct(ProductRequest productRequest); // 會去新增Product的方法
 
+    void updateProduct(Integer productId, ProductRequest productRequest); // 會去更新Product的方法
 }
