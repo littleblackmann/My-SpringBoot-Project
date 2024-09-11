@@ -16,23 +16,23 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products/{productId}")
-    public ResponseEntity<Product> getProduct(@PathVariable Integer productId) {
-        Product product = productService.getProductById(productId);
+    public ResponseEntity<Product> getProduct(@PathVariable Integer productId) { // 會去接住ProductID的值
+        Product product = productService.getProductById(productId); // 會去查詢ProductID的方法
 
-        if (product != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(product);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (product != null) {                                          // 如果查詢到的Product不是null
+            return ResponseEntity.status(HttpStatus.OK).body(product);  // 返回查詢到的Product
+        } else {                                                        // 如果查詢到的Product是null
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 返回查詢不到的狀態碼
         }
     }
 
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) {
-        Integer productId =  productService.createProduct(productRequest);
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) { // 會去接住前端傳過來的json參數
+        Integer productId =  productService.createProduct(productRequest); // 會去執行新增Product的方法
 
-        Product product = productService.getProductById(productId);
+        Product product = productService.getProductById(productId); // 會去查詢ProductID的方法
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product); // 返回新增的Product
     }
 
     @PutMapping("/products/{productId}")
@@ -43,7 +43,7 @@ public class ProductController {
         Product product = productService.getProductById(productId);
 
         if (product == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 如果查詢到的Product是null，返回查詢不到的狀態碼
         }
 
         // 修改商品數據
@@ -51,18 +51,15 @@ public class ProductController {
 
         Product updatedProduct = productService.getProductById(productId); // 會去查詢ProductID的方法
 
-        return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProduct); // 返回更新的Product
     }
 
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
-        productService.deleteProductById(productId); // 會去執行刪除Product的方法
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) { // 會去接住ProductID的值
+        productService.deleteProductById(productId);                          // 會去執行刪除Product的方法
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();          // 返回刪除的狀態碼
     }
-
-
-
 }
 
 

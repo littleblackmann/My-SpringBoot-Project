@@ -1,5 +1,6 @@
 package com.littleblack.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.littleblack.springbootmall.constant.ProductCategory;
 
 import java.util.Date;
@@ -13,7 +14,11 @@ public class Product {
    private Integer price;
    private Integer stock;
    private String description;
+
+   //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
    private Date createdDate;
+
+   //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
    private Date lastModifiedDate;
 
     public Integer getProductId() {
