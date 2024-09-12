@@ -22,12 +22,19 @@ public class ProductController {
     // 查詢所有商品
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
+            // 查詢條件 Filtering
            @RequestParam(required = false) ProductCategory category,// 會去接住category的值 並且可以為null 代表不是必填
-           @RequestParam(required = false) String search // 會去接住search的值 並且可以為null 代表不是必填
+           @RequestParam(required = false) String search,// 會去接住search的值 並且可以為null 代表不是必填
+
+            // 排序 Sorting
+           @RequestParam(defaultValue = "created_date") String orderBy, // 會去接住orderBy的值 並且可以為null 代表不是必填
+           @RequestParam(defaultValue = "desc") String sort // 會去接住orderBy和sort的值 並且可以為null 代表不是必填
     ){
         ProductQueryParams productQueryParams = new ProductQueryParams(); // 創建一個ProductQueryParams的物件
         productQueryParams.setCategory(category); // 把category的值放到ProductQueryParams裡
         productQueryParams.setSearch(search); // 把search的值放到ProductQueryParams裡
+        productQueryParams.setOrderBy(orderBy); // 把orderBy的值放到ProductQueryParams裡
+        productQueryParams.setSort(sort); // 把sort的值放到ProductQueryParams裡
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
