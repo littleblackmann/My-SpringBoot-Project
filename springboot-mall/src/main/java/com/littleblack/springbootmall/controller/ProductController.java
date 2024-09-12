@@ -1,5 +1,6 @@
 package com.littleblack.springbootmall.controller;
 
+import com.littleblack.springbootmall.constant.ProductCategory;
 import com.littleblack.springbootmall.dto.ProductRequest;
 import com.littleblack.springbootmall.model.Product;
 import com.littleblack.springbootmall.service.ProductService;
@@ -19,8 +20,11 @@ public class ProductController {
 
     // 查詢所有商品
     @GetMapping("/products")
-    public ResponseEntity<List<Product>>  getProducts(){
-        List<Product> productList = productService.getProducts(); // 會去查詢所有Product的方法
+    public ResponseEntity<List<Product>>  getProducts(
+           @RequestParam(required = false) ProductCategory category,// 會去接住category的值
+           @RequestParam(required = false) String search
+    ){
+        List<Product> productList = productService.getProducts(category,search); // 會去查詢所有Product的方法
 
         return ResponseEntity.status(HttpStatus.OK).body(productList); // 返回查詢到的所有Product
     }

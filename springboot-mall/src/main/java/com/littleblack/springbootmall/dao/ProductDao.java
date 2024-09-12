@@ -1,5 +1,6 @@
 package com.littleblack.springbootmall.dao;
 
+import com.littleblack.springbootmall.constant.ProductCategory;
 import com.littleblack.springbootmall.dto.ProductRequest;
 import com.littleblack.springbootmall.model.Product;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface ProductDao {
 
-    List<Product> getProducts(); // 會去查詢Products的方法
+    List<Product> getProducts(ProductCategory category,String search); // 會去查詢Products的方法
 
     Product getProductById(Integer productId); // 會去查詢ProductID的方法
 

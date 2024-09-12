@@ -1,5 +1,6 @@
 package com.littleblack.springbootmall.dao.impl;
 
+import com.littleblack.springbootmall.constant.ProductCategory;
 import com.littleblack.springbootmall.dao.ProductDao;
 import com.littleblack.springbootmall.dto.ProductRequest;
 import com.littleblack.springbootmall.model.Product;
@@ -23,14 +24,24 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category, String search) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, " +
                 "created_date, last_modified_date " +
-                "FROM product";
+                "FROM product WHERE 1=1";
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(); // 創建一個map
 
-        List<Product> productList = namedParameterJdbcTemplate.query(sql, new ProductRowMapper());
+        if (category != null) { // 如果category不是null
+            sql = sql + " AND category = :category"; // 就去查詢category
+            map.put("category", category.name()); // 把category的值放到map裡
+        }
+
+        if (search != null) { // 如果search不是null
+            sql = sql + " AND product_name LIKE :search"; // 就去查詢product_name
+            map.put("search", "%" + search + "%"); // 把search的值放到map裡 並且加上% 代表模糊查詢 例如: %search% 代表查詢包含search的所有資料
+        }
+
+        List<Product> productList = namedParameterJdbcTemplate.query(sql,map ,new ProductRowMapper());
 
         return productList;
     }
