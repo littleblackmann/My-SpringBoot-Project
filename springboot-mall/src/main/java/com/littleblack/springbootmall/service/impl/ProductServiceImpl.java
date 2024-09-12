@@ -1,7 +1,7 @@
 package com.littleblack.springbootmall.service.impl;
 
-import com.littleblack.springbootmall.constant.ProductCategory;
 import com.littleblack.springbootmall.dao.ProductDao;
+import com.littleblack.springbootmall.dto.ProductQueryParams;
 import com.littleblack.springbootmall.dto.ProductRequest;
 import com.littleblack.springbootmall.model.Product;
 import com.littleblack.springbootmall.service.ProductService;
@@ -17,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
-        return productDao.getProducts(category, search); // 會去查詢Products的方法
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productDao.getProducts(productQueryParams); // 會去查詢Products的方法
     }
 
     @Override
