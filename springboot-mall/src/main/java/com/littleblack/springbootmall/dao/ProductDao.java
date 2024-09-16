@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ProductDao {
 
+    Integer countProducts(ProductQueryParams productQueryParams); // 獲取總數
+
     List<Product> getProducts(ProductQueryParams productQueryParams); // 會去查詢Products的方法
 
     Product getProductById(Integer productId); // 會去查詢ProductID的方法

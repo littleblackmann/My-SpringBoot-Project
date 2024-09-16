@@ -5,6 +5,7 @@ import com.littleblack.springbootmall.dto.ProductQueryParams;
 import com.littleblack.springbootmall.dto.ProductRequest;
 import com.littleblack.springbootmall.model.Product;
 import com.littleblack.springbootmall.service.ProductService;
+import com.littleblack.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,19 +26,19 @@ public class ProductController {
 
     // 查詢所有商品
     @GetMapping("/products") // 設定路徑
-    public ResponseEntity<List<Product>> getProducts( // 返回查詢到的所有Product
+    public ResponseEntity<Page<Product>> getProducts( // 返回查詢到的所有Product
 
-            // 查詢條件 Filtering
-            @RequestParam(required = false) ProductCategory category,// 會去接住category的值 並且可以為null 代表不是必填
-            @RequestParam(required = false) String search,// 會去接住search的值 並且可以為null 代表不是必填
+                                             // 查詢條件 Filtering
+                                             @RequestParam(required = false) ProductCategory category,// 會去接住category的值 並且可以為null 代表不是必填
+                                             @RequestParam(required = false) String search,// 會去接住search的值 並且可以為null 代表不是必填
 
-            // 排序 Sorting
-            @RequestParam(defaultValue = "created_date") String orderBy, // 會去接住orderBy的值 並且可以為null 代表不是必填
-            @RequestParam(defaultValue = "desc") String sort, // 會去接住orderBy和sort的值 並且可以為null 代表不是必填
+                                             // 排序 Sorting
+                                             @RequestParam(defaultValue = "created_date") String orderBy, // 會去接住orderBy的值 並且可以為null 代表不是必填
+                                             @RequestParam(defaultValue = "desc") String sort, // 會去接住orderBy和sort的值 並且可以為null 代表不是必填
 
-            // 分頁 Pagination
-            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, // 會去接住limit的值 並且可以為null 代表不是必填
-            @RequestParam(defaultValue = "0") @Min(0) Integer offset  // 會去接住offset的值 並且可以為null 代表不是必填
+                                             // 分頁 Pagination
+                                             @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, // 會去接住limit的值 並且可以為null 代表不是必填
+                                             @RequestParam(defaultValue = "0") @Min(0) Integer offset  // 會去接住offset的值 並且可以為null 代表不是必填
 
 
     ){
@@ -49,9 +50,20 @@ public class ProductController {
         productQueryParams.setLimit(limit); // 把limit的值放到ProductQueryParams裡
         productQueryParams.setOffset(offset); // 把sort的值放到ProductQueryParams裡
 
+        // 取得product List
         List<Product> productList = productService.getProducts(productQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList); // 返回查詢到的所有Product
+        // 取得product總數
+        Integer total = productService.countProducts(productQueryParams); // 獲取總數
+
+        // 分頁
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page); // 返回查詢到的所有Product
     }
 
     // 查詢某一項商品

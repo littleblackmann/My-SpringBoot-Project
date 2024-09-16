@@ -17,6 +17,11 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
+    public Integer countProducts(ProductQueryParams productQueryParams) {
+        return productDao.countProducts(productQueryParams); // 獲取總數
+    }
+
+    @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         return productDao.getProducts(productQueryParams); // 會去查詢Products的方法
     }
@@ -40,4 +45,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Integer productId) {
         productDao.deleteProductById(productId); // 會去刪除Product的方法
     }
+
 }
