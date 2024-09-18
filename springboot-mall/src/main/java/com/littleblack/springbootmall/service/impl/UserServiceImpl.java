@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
@@ -36,6 +37,10 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // 拋出錯誤
         }
 
+        // 使用 MD5 生成密碼雜湊值
+        String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
+        userRegisterRequest.setPassword(hashedPassword);
+
         // 創建使用者
         return userDao.createUser(userRegisterRequest);
     }
@@ -45,13 +50,17 @@ public class UserServiceImpl implements UserService {
         // 檢查登入的Email是否已經存在
         User user = userDao.getUserByEmail(userLoginRequest.getEmail());
 
+        // 檢查User是否存在
         if (user == null) {
             log.warn("該 Email {} 尚未註冊", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        // 使用 MD5 生成密碼雜湊值
+        String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
+
         // 檢查密碼是否正確
-        if (user.getPassword().equals(userLoginRequest.getPassword())) {
+        if (user.getPassword().equals(hashedPassword)) {
             return user;
         } else {
             log.warn("Email {} 的密碼不正確", userLoginRequest.getEmail());
