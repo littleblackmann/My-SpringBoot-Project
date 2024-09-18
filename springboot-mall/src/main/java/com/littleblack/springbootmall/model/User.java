@@ -1,12 +1,20 @@
 package com.littleblack.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class User {
 
     private Integer userId;
+
+    @JsonProperty("您註冊的帳號為") // 這樣就可以改名稱
     private String email;
+
+    @JsonIgnore // 這樣就不會被顯示
     private String password;
+
     private Date createdDate;
     private Date lastModifiedDate;
 
