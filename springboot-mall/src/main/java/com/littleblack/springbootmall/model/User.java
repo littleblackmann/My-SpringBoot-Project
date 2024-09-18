@@ -9,7 +9,7 @@ public class User {
 
     private Integer userId;
 
-    @JsonProperty("您註冊的帳號為") // 這樣就可以改名稱
+    @JsonProperty
     private String email;
 
     @JsonIgnore // 這樣就不會被顯示
