@@ -18,6 +18,8 @@ public interface ProductDao {
 
     void updateProduct(Integer productId, ProductRequest productRequest); // 會去更新Product的方法
 
+    void updateStock(Integer produtId, Integer stock); // 會去更新Product的庫存
+
     void deleteProductById(Integer productId); // 會去刪除Product的方法
 
 }
