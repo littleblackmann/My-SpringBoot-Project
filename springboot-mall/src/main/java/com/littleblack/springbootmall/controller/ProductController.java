@@ -78,6 +78,7 @@ public class ProductController {
         }
     }
 
+
     // 新增商品
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) { // 會去接住前端傳過來的json參數

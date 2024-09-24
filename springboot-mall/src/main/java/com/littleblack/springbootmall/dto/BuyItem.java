@@ -10,6 +10,17 @@ public class BuyItem {
     @NotNull
     private Integer quantity;
 
+    @NotNull
+    private String productName;
+
+    public @NotNull String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(@NotNull String productName) {
+        this.productName = productName;
+    }
+
     public Integer getProductId() {
         return productId;
     }

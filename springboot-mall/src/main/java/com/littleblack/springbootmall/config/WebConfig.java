@@ -14,6 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:8080")  // Vue前端運行在 8080port
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false);
     }
 }
