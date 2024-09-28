@@ -7,6 +7,8 @@ import java.util.Date;
 
 public class User {
 
+    private Boolean isAdmin;
+
     private Integer userId;
 
     @JsonProperty
@@ -17,6 +19,15 @@ public class User {
 
     private Date createdDate;
     private Date lastModifiedDate;
+
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
 
     public Integer getUserId() {
         return userId;

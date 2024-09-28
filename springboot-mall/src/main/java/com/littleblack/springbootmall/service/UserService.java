@@ -11,4 +11,5 @@ public interface UserService {
     Integer register(UserRegisterRequest userRegisterRequest);
 
     User login(UserLoginRequest userLoginRequest);
+
 }
