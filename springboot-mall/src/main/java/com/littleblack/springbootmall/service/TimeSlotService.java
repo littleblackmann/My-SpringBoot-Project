@@ -15,4 +15,9 @@ public interface TimeSlotService {
     boolean isSlotAvailable(LocalDate date, Integer timeSlotId, Integer guestCount);
 
     TimeSlot updateSlotCapacity(Integer slotId, Integer capacity);
+
+    Integer getTimeSlotIdByTime(String timeRange);
+
+    // 新增這個方法
+    List<String> getAvailableTimeRanges(LocalDate date);
 }

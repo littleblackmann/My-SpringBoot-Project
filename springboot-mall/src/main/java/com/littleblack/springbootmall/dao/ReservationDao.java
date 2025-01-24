@@ -4,6 +4,7 @@ import com.littleblack.springbootmall.model.Reservation;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Date;
 
 public interface ReservationDao {
@@ -32,4 +33,7 @@ public interface ReservationDao {
             String contactPhone,
             String email,
             Integer status);
+
+    // 新增這個方法
+    Map<Integer, Integer> getReservedSeatsByDate(LocalDate date);
 }

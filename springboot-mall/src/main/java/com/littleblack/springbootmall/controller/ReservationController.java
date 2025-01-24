@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.validation.Valid;
 
 import java.time.Instant;
@@ -25,6 +27,9 @@ import java.util.Map;
 @RequestMapping("/api/reservations")
 public class ReservationController {
 
+    private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
+
+
     @Autowired
     private ReservationService reservationService;
 
@@ -32,26 +37,69 @@ public class ReservationController {
     public ResponseEntity<Map<String, Object>> createReservation(
             @Valid @RequestBody ReservationRequest request) {
 
-        Reservation reservation = new Reservation();
-        reservation.setUserId(request.getUserId());
-        reservation.setCustomerName(request.getCustomerName());
-        reservation.setReservationDate(Date.valueOf(request.getReservationDate()));
-        reservation.setTimeSlotId(request.getTimeSlotId());
-        reservation.setGuestCount(request.getGuestCount());
-        reservation.setContactPhone(request.getContactPhone());
-        reservation.setEmail(request.getEmail());
-        reservation.setSpecialRequests(request.getSpecialRequests());
+        log.info("Received reservation request for customer: {}", request.getCustomerName());
 
-        String reservationId = reservationService.createReservation(reservation);
-        Reservation createdReservation = reservationService.getReservationById(reservationId);
-        ReservationResponse responseData = convertToReservationResponse(createdReservation);
+        try {
+            validateReservationRequest(request);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "訂位成功！");
-        response.put("data", responseData);
+            Reservation reservation = new Reservation();
+            reservation.setUserId(request.getUserId());
+            reservation.setCustomerName(request.getCustomerName());
+            reservation.setReservationDate(Date.valueOf(request.getReservationDate()));
+            reservation.setTimeSlotId(request.getTimeSlotId());
+            reservation.setGuestCount(request.getGuestCount());
+            reservation.setContactPhone(request.getContactPhone());
+            reservation.setEmail(request.getEmail());
+            reservation.setSpecialRequests(request.getSpecialRequests());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            String reservationId = reservationService.createReservation(reservation);
+
+            if (reservationId == null) {
+                throw new RuntimeException("建立訂位失敗");
+            }
+
+            Reservation createdReservation = reservationService.getReservationById(reservationId);
+            ReservationResponse responseData = convertToReservationResponse(createdReservation);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "訂位成功！");
+            response.put("data", responseData);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid reservation request: {}", e.getMessage());
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+
+        } catch (Exception e) {
+            log.error("Error creating reservation", e);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "建立訂位時發生錯誤");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    private void validateReservationRequest(ReservationRequest request) {
+        if (request.getReservationDate() == null) {
+            throw new IllegalArgumentException("預約日期不能為空");
+        }
+        if (request.getCustomerName() == null || request.getCustomerName().trim().isEmpty()) {
+            throw new IllegalArgumentException("顧客姓名不能為空");
+        }
+        if (request.getContactPhone() == null || request.getContactPhone().trim().isEmpty()) {
+            throw new IllegalArgumentException("聯絡電話不能為空");
+        }
+        if (request.getTimeSlotId() == null) {
+            throw new IllegalArgumentException("時段不能為空");
+        }
+        if (request.getGuestCount() == null || request.getGuestCount() <= 0) {
+            throw new IllegalArgumentException("用餐人數必須大於0");
+        }
     }
 
     @GetMapping
@@ -140,22 +188,39 @@ public class ReservationController {
     }
 
     private ReservationResponse convertToReservationResponse(Reservation reservation) {
+        if (reservation == null) {
+            log.warn("Attempting to convert null reservation to response");
+            return null;
+        }
+
         ReservationResponse response = new ReservationResponse();
-        response.setReservationId(reservation.getReservationId());
-        response.setUserId(reservation.getUserId());
-        response.setCustomerName(reservation.getCustomerName());
-        response.setReservationDate(Instant.ofEpochMilli(reservation.getReservationDate().getTime())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate());
-        response.setTimeSlotId(reservation.getTimeSlotId());
-        response.setGuestCount(reservation.getGuestCount());
-        response.setContactPhone(reservation.getContactPhone());
-        response.setEmail(reservation.getEmail());
-        response.setStatus(reservation.getStatus());
-        response.setCancelDeadline(reservation.getCancelDeadline());
-        response.setSpecialRequests(reservation.getSpecialRequests());
-        response.setCreatedAt(reservation.getCreatedAt());
-        response.setUpdatedAt(reservation.getUpdatedAt());
+
+        try {
+            response.setReservationId(reservation.getReservationId());
+            response.setUserId(reservation.getUserId());
+            response.setCustomerName(reservation.getCustomerName());
+
+            if (reservation.getReservationDate() != null) {
+                response.setReservationDate(Instant.ofEpochMilli(reservation.getReservationDate().getTime())
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate());
+            }
+
+            response.setTimeSlotId(reservation.getTimeSlotId());
+            response.setGuestCount(reservation.getGuestCount());
+            response.setContactPhone(reservation.getContactPhone());
+            response.setEmail(reservation.getEmail());
+            response.setStatus(reservation.getStatus());
+            response.setCancelDeadline(reservation.getCancelDeadline());
+            response.setSpecialRequests(reservation.getSpecialRequests());
+            response.setCreatedAt(reservation.getCreatedAt());
+            response.setUpdatedAt(reservation.getUpdatedAt());
+
+        } catch (Exception e) {
+            log.error("Error converting reservation to response", e);
+            throw new RuntimeException("轉換訂位資料時發生錯誤");
+        }
+
         return response;
     }
 }

@@ -3,7 +3,12 @@ package com.littleblack.springbootmall.dto.ai;
 public class ChatRequest {
     private String message;
 
-    // 構造函數、getter和setter保持不變
+    public ChatRequest() {
+    }
+
+    public ChatRequest(String message) {
+        this.message = message;
+    }
 
     public String getMessage() {
         return message;

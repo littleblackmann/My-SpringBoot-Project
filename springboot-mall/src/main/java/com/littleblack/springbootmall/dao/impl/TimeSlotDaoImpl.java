@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalTime;
+import java.util.Optional;
+import java.sql.Time;
+
 
 @Component
 public class TimeSlotDaoImpl implements TimeSlotDao {
@@ -111,4 +115,25 @@ public class TimeSlotDaoImpl implements TimeSlotDao {
 
         return getTimeSlotById(slotId);
     }
+
+    @Override
+    public Optional<TimeSlot> getTimeSlotByStartTime(LocalTime startTime) {
+        String sql = "SELECT slot_id, start_time, end_time, capacity FROM time_slots WHERE start_time = :startTime";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("startTime", Time.valueOf(startTime));
+
+        List<TimeSlot> timeSlotList = namedParameterJdbcTemplate.query(sql, map, (rs, rowNum) -> {
+            TimeSlot timeSlot = new TimeSlot();
+            timeSlot.setSlotId(rs.getInt("slot_id"));
+            timeSlot.setStartTime(rs.getTime("start_time").toLocalTime());
+            timeSlot.setEndTime(rs.getTime("end_time").toLocalTime());
+            timeSlot.setCapacity(rs.getInt("capacity"));
+            return timeSlot;
+        });
+
+        return timeSlotList.isEmpty() ? Optional.empty() : Optional.of(timeSlotList.get(0));
+    }
+
+
 }
